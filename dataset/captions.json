@@ -1,0 +1,124 @@
+{
+  "images": [
+    {
+      "id": 1,
+      "category": "drivers_emotions",
+      "filename": "1_drivers_emotions/driver_01.jpg",
+      "caption": ""
+    },
+    {
+      "id": 2,
+      "category": "drivers_emotions",
+      "filename": "1_drivers_emotions/driver_02.jpg",
+      "caption": ""
+    },
+    {
+      "id": 3,
+      "category": "drivers_emotions",
+      "filename": "1_drivers_emotions/driver_03.jpg",
+      "caption": ""
+    },
+    {
+      "id": 4,
+      "category": "drivers_emotions",
+      "filename": "1_drivers_emotions/driver_04.jpg",
+      "caption": ""
+    },
+    {
+      "id": 5,
+      "category": "drivers_emotions",
+      "filename": "1_drivers_emotions/driver_05.jpg",
+      "caption": ""
+    },
+    {
+      "id": 6,
+      "category": "pit_stops_mechanics",
+      "filename": "2_pit_stops/pitstop_01.jpg",
+      "caption": ""
+    },
+    {
+      "id": 7,
+      "category": "pit_stops_mechanics",
+      "filename": "2_pit_stops/pitstop_02.jpg",
+      "caption": ""
+    },
+    {
+      "id": 8,
+      "category": "pit_stops_mechanics",
+      "filename": "2_pit_stops/pitstop_03.jpg",
+      "caption": ""
+    },
+    {
+      "id": 9,
+      "category": "pit_stops_mechanics",
+      "filename": "2_pit_stops/pitstop_04.jpg",
+      "caption": ""
+    },
+    {
+      "id": 10,
+      "category": "pit_stops_mechanics",
+      "filename": "2_pit_stops/pitstop_05.jpg",
+      "caption": ""
+    },
+    {
+      "id": 11,
+      "category": "cars_track_moments",
+      "filename": "3_cars_tracks_moments/car_01.jpg",
+      "caption": ""
+    },
+    {
+      "id": 12,
+      "category": "cars_track_moments",
+      "filename": "3_cars_tracks_moments/car_02.jpg",
+      "caption": ""
+    },
+    {
+      "id": 13,
+      "category": "cars_track_moments",
+      "filename": "3_cars_tracks_moments/car_03.jpg",
+      "caption": ""
+    },
+    {
+      "id": 14,
+      "category": "cars_track_moments",
+      "filename": "3_cars_tracks_moments/car_04.jpg",
+      "caption": ""
+    },
+    {
+      "id": 15,
+      "category": "cars_track_moments",
+      "filename": "3_cars_tracks_moments/car_05.jpg",
+      "caption": ""
+    },
+    {
+      "id": 16,
+      "category": "strategy_data",
+      "filename": "4_strategy_data/strategy_01.jpg",
+      "caption": ""
+    },
+    {
+      "id": 17,
+      "category": "strategy_data",
+      "filename": "4_strategy_data/strategy_02.jpg",
+      "caption": ""
+    },
+    {
+      "id": 18,
+      "category": "strategy_data",
+      "filename": "4_strategy_data/strategy_03.jpg",
+      "caption": ""
+    },
+    {
+      "id": 19,
+      "category": "strategy_data",
+      "filename": "4_strategy_data/strategy_04.jpg",
+      "caption": ""
+    },
+    {
+      "id": 20,
+      "category": "strategy_data",
+      "filename": "4_strategy_data/strategy_05.jpg",
+      "caption": ""
+    }
+  ]
+}
