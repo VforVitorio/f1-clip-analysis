@@ -6,7 +6,8 @@ build:
 run-preclip:
 	docker run --rm --gpus all \
 		-v "$(PWD):/opt/project" \
-		$(IMAGE) python scripts/run_preclip.py
+		-w /opt/project \
+		$(IMAGE) python src/preclip/run_preclip.py
 
 run-clip:
 	docker run --rm --gpus all \
