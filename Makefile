@@ -1,16 +1,27 @@
-IMAGE := sii-clip
+IMAGE := f1-clip-analysis
 
 build:
 	docker build -t $(IMAGE) .
 
+run-preclip:
+	docker run --rm --gpus all \
+		-v $(PWD):/opt/project \
+		$(IMAGE) python scripts/run_preclip.py
+
+run-clip:
+	docker run --rm --gpus all \
+		-v $(PWD):/opt/project \
+		$(IMAGE) python scripts/run_clip.py
+
+compare:
+	docker run --rm --gpus all \
+		-v $(PWD):/opt/project \
+		$(IMAGE) python scripts/compare_results.py
 
 shell:
-	docker run -it \
-		--shm-size=24g \
-		-e DISPLAY=:0 \
-		-e QT_X11_NO_MITSHM=1 \
-		-v ./:/opt/project \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		--gpus all \
-		--rm \
+	docker run -it --rm --gpus all \
+		-v $(PWD):/opt/project \
 		$(IMAGE) /bin/bash
+
+clean:
+	docker rmi $(IMAGE)
