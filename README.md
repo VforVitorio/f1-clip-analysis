@@ -57,7 +57,7 @@ f1-clip-analysis/
 ## ⚠️ Dataset Warning
 
 **The dataset is NOT included in this repository** due to size/licensing constraints.
-If needed, contact me through my links of my bio-
+If needed, contact me through my links of my bio.
 
 The dataset structure required:
 
