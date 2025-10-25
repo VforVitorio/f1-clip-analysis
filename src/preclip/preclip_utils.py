@@ -1,69 +1,35 @@
 """
-Utility functions for Pre-CLIP analysis.
+Utility functions specific to Pre-CLIP analysis.
 
-This module provides functions for:
-- Loading the F1 dataset (images and captions)
-- Computing cosine similarity between embeddings
-- Saving results and embeddings for analysis
+Pre-CLIP uses separate image (ResNet50) and text (sentence-transformers) encoders
+that produce embeddings with different dimensions. This module provides functions
+to handle this dimension mismatch using PCA projection.
 """
 
-import json
-import os
-import torch
-import numpy as np
-import pandas as pd
-from PIL import Image
+import sys
 from pathlib import Path
-from sklearn.metrics.pairwise import cosine_similarity
+import torch
 from sklearn.decomposition import PCA
 
+# Add parent directory to path to import from src
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-def load_dataset(dataset_path):
-    """
-    Load images and captions from the F1 dataset.
-
-    Args:
-        dataset_path: Path to dataset root directory containing captions.json
-
-    Returns:
-        Tuple of (images, captions, metadata) where:
-            - images: List of PIL Image objects
-            - captions: List of caption strings
-            - metadata: List of dicts with image info (id, category, filename)
-    """
-    captions_file = os.path.join(dataset_path, "captions.json")
-
-    with open(captions_file, 'r') as f:
-        data = json.load(f)
-
-    images = []
-    captions = []
-    metadata = []
-
-    for item in data['images']:
-        img_path = os.path.join(dataset_path, item['filename'])
-
-        # Load image
-        img = Image.open(img_path).convert('RGB')
-        images.append(img)
-
-        # Store caption
-        captions.append(item['caption'])
-
-        # Store metadata
-        metadata.append({
-            'id': item['id'],
-            'category': item['category'],
-            'filename': item['filename']
-        })
-
-    return images, captions, metadata
+from utils import compute_cosine_similarity as _base_compute_cosine_similarity
 
 
-# Need to add this due to dimension difference
 def project_to_common_space(embeddings1, embeddings2):
     """
     Project embeddings to common dimensionality using PCA.
+
+    This is needed for Pre-CLIP because image and text encoders
+    produce embeddings with different dimensions.
+
+    Args:
+        embeddings1: Tensor of shape (n, dim1)
+        embeddings2: Tensor of shape (m, dim2)
+
+    Returns:
+        Tuple of projected tensors with same dimensionality
     """
     emb1_np = embeddings1.cpu().numpy()
     emb2_np = embeddings2.cpu().numpy()
@@ -89,9 +55,12 @@ def compute_cosine_similarity(embeddings1, embeddings2):
     """
     Compute cosine similarity matrix between two sets of embeddings.
 
+    This Pre-CLIP version handles embeddings with different dimensions
+    by projecting them to a common space using PCA before computing similarity.
+
     Args:
-        embeddings1: Tensor of shape (n, dim)
-        embeddings2: Tensor of shape (m, dim)
+        embeddings1: Tensor of shape (n, dim1)
+        embeddings2: Tensor of shape (m, dim2)
 
     Returns:
         Similarity matrix of shape (n, m)
@@ -101,67 +70,5 @@ def compute_cosine_similarity(embeddings1, embeddings2):
         embeddings1, embeddings2 = project_to_common_space(
             embeddings1, embeddings2)
 
-    # Normalize
-    embeddings1_norm = torch.nn.functional.normalize(embeddings1, p=2, dim=1)
-    embeddings2_norm = torch.nn.functional.normalize(embeddings2, p=2, dim=1)
-
-    # Compute similarity
-    similarity = torch.mm(embeddings1_norm, embeddings2_norm.t())
-
-    return similarity
-
-
-def save_embeddings(embeddings, metadata, output_path, prefix):
-    """
-    Save embeddings and metadata to disk.
-
-    Args:
-        embeddings: Tensor of embeddings
-        metadata: List of metadata dicts
-        output_path: Directory to save files
-        prefix: Prefix for filenames (e.g., 'image' or 'text')
-    """
-    os.makedirs(output_path, exist_ok=True)
-
-    # Convert to numpy and save
-    embeddings_np = embeddings.cpu().numpy()
-    np.save(
-        os.path.join(output_path, f'{prefix}_embeddings.npy'),
-        embeddings_np
-    )
-
-    # Save metadata
-    metadata_df = pd.DataFrame(metadata)
-    metadata_df.to_csv(
-        os.path.join(output_path, f'{prefix}_metadata.csv'),
-        index=False
-    )
-
-
-def save_similarity_matrix(similarity_matrix, metadata, output_path, filename):
-    """
-    Save similarity matrix as CSV with row/column labels.
-
-    Args:
-        similarity_matrix: Tensor of similarity scores
-        metadata: List of metadata dicts for labeling
-        output_path: Directory to save file
-        filename: Name of output CSV file
-    """
-    os.makedirs(output_path, exist_ok=True)
-
-    # Convert to numpy
-    similarity_np = similarity_matrix.cpu().numpy()
-
-    # Create labels from metadata
-    labels = [f"{m['category']}_{m['id']}" for m in metadata]
-
-    # Create DataFrame
-    df = pd.DataFrame(
-        similarity_np,
-        index=labels,
-        columns=labels
-    )
-
-    # Save
-    df.to_csv(os.path.join(output_path, filename))
+    # Use base implementation from utils
+    return _base_compute_cosine_similarity(embeddings1, embeddings2)

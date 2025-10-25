@@ -12,7 +12,8 @@ run-preclip:
 run-clip:
 	docker run --rm --gpus all \
 		-v "$(PWD):/opt/project" \
-		$(IMAGE) python scripts/run_clip.py
+		-w /opt/project \
+		$(IMAGE) python src/clip/run_clip.py
 
 compare:
 	docker run --rm --gpus all \

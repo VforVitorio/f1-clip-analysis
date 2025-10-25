@@ -6,16 +6,16 @@ This script extracts embeddings using separate image (ResNet50) and text
 and saves results for analysis.
 """
 
+import sys
 import torch
 from pathlib import Path
 
+# Add parent directory to path to import from src
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from preclip_models import ImageEncoder, TextEncoder
-from preclip_utils import (
-    load_dataset,
-    compute_cosine_similarity,
-    save_embeddings,
-    save_similarity_matrix
-)
+from utils import load_dataset, save_embeddings, save_similarity_matrix
+from preclip_utils import compute_cosine_similarity
 
 
 def setup_paths():

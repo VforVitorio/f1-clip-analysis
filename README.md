@@ -35,14 +35,14 @@ f1-clip-analysis/
 │   ├── 4_strategy_data/
 │   └── captions.json
 ├── src/
+│   ├── utils.py                 # Common utilities (dataset, similarity, saving)
 │   ├── preclip/
 │   │   ├── run_preclip.py       # Task 2: Pre-CLIP analysis
 │   │   ├── preclip_models.py    # ResNet + sentence-transformer
-│   │   └── preclip_utils.py     # Dataset loading, similarity
+│   │   └── preclip_utils.py     # Pre-CLIP specific (PCA projection)
 │   └── clip/
 │       ├── run_clip.py          # Task 3: CLIP analysis
-│       ├── clip_models.py       # CLIP model
-│       └── clip_utils.py        # Dataset loading, similarity
+│       └── clip_models.py       # CLIP model
 ├── results/
 │   ├── preclip/                 # Pre-CLIP outputs
 │   └── clip/                    # CLIP outputs
