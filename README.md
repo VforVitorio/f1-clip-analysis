@@ -28,28 +28,42 @@ Dataset: 20 F1 images across 4 categories with manually written captions.
 
 ```
 f1-clip-analysis/
+├── .gitignore
+├── Dockerfile
+├── LICENSE
+├── Makefile
+├── README.md
+├── requirements.txt
 ├── dataset/                      # ⚠️ NOT INCLUDED (see below)
 │   ├── 1_drivers_emotions/
 │   ├── 2_pit_stops/
 │   ├── 3_cars_tracks_moments/
 │   ├── 4_strategy_data/
 │   └── captions.json
-├── src/
-│   ├── utils.py                 # Common utilities (dataset, similarity, saving)
-│   ├── preclip/
-│   │   ├── run_preclip.py       # Task 2: Pre-CLIP analysis
-│   │   ├── preclip_models.py    # ResNet + sentence-transformer
-│   │   └── preclip_utils.py     # Pre-CLIP specific (PCA projection)
-│   └── clip/
-│       ├── run_clip.py          # Task 3: CLIP analysis
-│       └── clip_models.py       # CLIP model
+├── notebooks/
+│   └── analysis.ipynb           # Analysis notebook
 ├── results/
-│   ├── preclip/                 # Pre-CLIP outputs
-│   └── clip/                    # CLIP outputs
-├── Dockerfile
-├── Makefile
-├── requirements.txt
-└── README.md
+│   ├── clip/
+│   │   ├── image_embeddings.npy
+│   │   ├── image_metadata.csv
+│   │   ├── similarity_matrix.csv
+│   │   ├── text_embeddings.npy
+│   │   └── text_metadata.csv
+│   └── preclip/
+│       ├── image_embeddings.npy
+│       ├── image_metadata.csv
+│       ├── similarity_matrix.csv
+│       ├── text_embeddings.npy
+│       └── text_metadata.csv
+└── src/
+    ├── utils.py                 # Common utilities (dataset, similarity, saving)
+    ├── clip/
+    │   ├── clip_models.py       # CLIP model
+    │   └── run_clip.py          # Task 3: CLIP analysis
+    └── preclip/
+        ├── preclip_models.py    # ResNet + sentence-transformer
+        ├── preclip_utils.py     # Pre-CLIP specific (PCA projection)
+        └── run_preclip.py       # Task 2: Pre-CLIP analysis
 ```
 
 ---
