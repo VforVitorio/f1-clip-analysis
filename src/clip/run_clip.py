@@ -1,11 +1,17 @@
 """
 CLIP analysis script.
 
-This script extracts embeddings using the unified CLIP model for both images and text,
-computes similarity in the shared embedding space, and saves results
-
+Extracts embeddings using unified CLIP model for both images and text,
+computes similarity in shared embedding space, and saves results.
 """
 
+from utils import (
+    load_dataset,
+    compute_cosine_similarity,
+    save_embeddings,
+    save_similarity_matrix
+)
+from clip_models import CLIPEncoder
 import sys
 import torch
 from pathlib import Path
@@ -13,17 +19,9 @@ from pathlib import Path
 # Add parent directory to path to import from src
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from clip_models import CLIPEncoder
-from utils import (
-    load_dataset,
-    compute_cosine_similarity,
-    save_embeddings,
-    save_similarity_matrix
-)
-
 
 def setup_paths():
-    """Configure dataset and output paths."""
+    """Set up dataset and output directories."""
     project_root = Path(__file__).resolve().parent.parent.parent
     dataset_path = project_root / "dataset"
     output_path = project_root / "results" / "clip"
@@ -35,7 +33,7 @@ def setup_paths():
 
 
 def initialize_encoder():
-    """Create and return CLIP encoder."""
+    """Initialize CLIP encoder."""
     print("\nInitializing CLIP encoder...")
     encoder = CLIPEncoder()
 
@@ -59,7 +57,7 @@ def extract_embeddings(encoder, images, captions):
 
 
 def compute_and_save_results(image_embeddings, text_embeddings, metadata, output_path):
-    """Compute similarity matrix and save all results."""
+    """Compute similarity and save all results."""
     print("\nComputing similarity matrix...")
     similarity_matrix = compute_cosine_similarity(
         image_embeddings, text_embeddings)
@@ -82,7 +80,7 @@ def compute_and_save_results(image_embeddings, text_embeddings, metadata, output
 
 
 def main():
-    """Main execution function for CLIP analysis."""
+    """Run CLIP analysis."""
     print("=" * 60)
     print("CLIP Analysis - Unified Multimodal Embeddings")
     print("=" * 60)

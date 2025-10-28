@@ -1,11 +1,11 @@
 """
-Utility functions specific to Pre-CLIP analysis.
+Pre-CLIP utilities for handling different embedding dimensions.
 
-Pre-CLIP uses separate image (ResNet50) and text (sentence-transformers) encoders
-that produce embeddings with different dimensions. This module provides functions
-to handle this dimension mismatch using PCA projection.
+Uses PCA to project image and text embeddings to a common space
+since ResNet50 and sentence-transformers output different dimensions.
 """
 
+from utils import compute_cosine_similarity as _base_compute_cosine_similarity
 import sys
 from pathlib import Path
 import torch
@@ -14,22 +14,12 @@ from sklearn.decomposition import PCA
 # Add parent directory to path to import from src
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from utils import compute_cosine_similarity as _base_compute_cosine_similarity
-
 
 def project_to_common_space(embeddings1, embeddings2):
     """
     Project embeddings to common dimensionality using PCA.
 
-    This is needed for Pre-CLIP because image and text encoders
-    produce embeddings with different dimensions.
-
-    Args:
-        embeddings1: Tensor of shape (n, dim1)
-        embeddings2: Tensor of shape (m, dim2)
-
-    Returns:
-        Tuple of projected tensors with same dimensionality
+    Needed because image and text encoders produce different dimensions.
     """
     emb1_np = embeddings1.cpu().numpy()
     emb2_np = embeddings2.cpu().numpy()
@@ -53,17 +43,9 @@ def project_to_common_space(embeddings1, embeddings2):
 
 def compute_cosine_similarity(embeddings1, embeddings2):
     """
-    Compute cosine similarity matrix between two sets of embeddings.
+    Compute cosine similarity between embeddings with different dimensions.
 
-    This Pre-CLIP version handles embeddings with different dimensions
-    by projecting them to a common space using PCA before computing similarity.
-
-    Args:
-        embeddings1: Tensor of shape (n, dim1)
-        embeddings2: Tensor of shape (m, dim2)
-
-    Returns:
-        Similarity matrix of shape (n, m)
+    Projects to common space via PCA if needed before computing similarity.
     """
     # Project to common space if dimensions differ
     if embeddings1.shape[1] != embeddings2.shape[1]:

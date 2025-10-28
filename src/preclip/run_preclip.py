@@ -1,11 +1,13 @@
 """
 Pre-CLIP analysis script.
 
-This script extracts embeddings using separate image (ResNet50) and text 
-(sentence-transformers) models, computes similarity between images and captions,
-and saves results for analysis.
+Extracts embeddings using separate ResNet50 (images) and sentence-transformers (text) models,
+then computes similarity and saves results.
 """
 
+from preclip_utils import compute_cosine_similarity
+from utils import load_dataset, save_embeddings, save_similarity_matrix
+from preclip_models import ImageEncoder, TextEncoder
 import sys
 import torch
 from pathlib import Path
@@ -13,13 +15,9 @@ from pathlib import Path
 # Add parent directory to path to import from src
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from preclip_models import ImageEncoder, TextEncoder
-from utils import load_dataset, save_embeddings, save_similarity_matrix
-from preclip_utils import compute_cosine_similarity
-
 
 def setup_paths():
-    """Configure dataset and output paths."""
+    """Set up dataset and output directories."""
     project_root = Path(__file__).resolve().parent.parent.parent
     dataset_path = project_root / "dataset"
     output_path = project_root / "results" / "preclip"
@@ -31,7 +29,7 @@ def setup_paths():
 
 
 def initialize_encoders():
-    """Create and return image and text encoders."""
+    """Initialize image and text encoders."""
     print("\nInitializing encoders...")
     image_encoder = ImageEncoder()
     text_encoder = TextEncoder()
@@ -58,7 +56,7 @@ def extract_embeddings(image_encoder, text_encoder, images, captions):
 
 
 def compute_and_save_results(image_embeddings, text_embeddings, metadata, output_path):
-    """Compute similarity matrix and save all results."""
+    """Compute similarity and save all results."""
     print("\nComputing similarity matrix...")
     similarity_matrix = compute_cosine_similarity(
         image_embeddings, text_embeddings)
@@ -81,7 +79,7 @@ def compute_and_save_results(image_embeddings, text_embeddings, metadata, output
 
 
 def main():
-    """Main execution function for Pre-CLIP analysis."""
+    """Run Pre-CLIP analysis."""
     print("=" * 60)
     print("Pre-CLIP Analysis - Separate Image and Text Encoders")
     print("=" * 60)

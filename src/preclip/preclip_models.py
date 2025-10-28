@@ -1,19 +1,12 @@
 """
-Pre-CLIP image and text encoders for embedding extraction.
+Pre-CLIP image and text encoders.
 
-This module implements separate pre-trained models for image and text encoding. 
-This represents the "pre-CLIP" approach where vision and language models were trained independently
-rather than jointly.
+Uses separate pretrained models:
+- ResNet50 (ImageNet) for images → 2048-dim features
+- DistilUSE multilingual for text → 512-dim features
 
-Components:
-    - ImageEncoder: ResNet50 (pretrained on ImageNet) for extracting visual features
-    - TextEncoder: DistilUSE multilingual model for extracting text features
-
-Both encoders auto-detect and use the GPU if available, apply appropriate preprocessing and normalization
-support both single samples and batch processing and return L2-normalized embeddings as torch.Tensors
-
-The embeddings from these models will be compared using cosine similarity to analyze the matching 
-performance before the multimodal CLIP approach
+Both models auto-detect GPU and return normalized embeddings.
+This represents the old approach before joint training.
 """
 
 import torch
@@ -25,16 +18,13 @@ from PIL import Image
 
 class ImageEncoder:
     """
-    ResNet50-based image encoder for extracting visual features.
+    ResNet50 image encoder (pretrained on ImageNet).
 
-    Uses pretrained ResNet50 without the classification head, extracting 2048-dimensional
-    feature vectors from the final pooling layer.
+    Extracts 2048-dim features from the final pooling layer.
     """
 
     def __init__(self):
-        """
-        Initialize ResNet50 encoder and preprocessing pipeline
-        """
+        """Initialize ResNet50 and preprocessing."""
         self.device = torch.device(
             "cuda" if torch.cuda.is_available() else "cpu")
 
@@ -58,19 +48,11 @@ class ImageEncoder:
         self._embedding_dim = 2048
 
     def get_embedding_dim(self):
-        """Return the dimensionality of the embeddings."""
+        """Return embedding dimensionality."""
         return self._embedding_dim
 
     def encode(self, images):
-        """
-        Extract and normalize embeddings from images.
-
-        Args:
-            images: Single PIL Image or list of PIL Images
-
-        Returns:
-            L2-normalized embeddings as torch.Tensor of shape (n, 2048)
-        """
+        """Extract normalized embeddings from images."""
         # Handle single image
         if isinstance(images, Image.Image):
             images = [images]
@@ -93,16 +75,13 @@ class ImageEncoder:
 
 class TextEncoder:
     """
-    Sentence-transformer based text encoder for extracting semantic features.
+    Sentence-transformer text encoder.
 
-    Uses distiluse-base-multilingual-cased model to generate 512-dimensional
-    sentence embeddings.
+    Uses distiluse-base-multilingual-cased to generate 512-dim embeddings.
     """
 
     def __init__(self):
-        """
-        Initialize sentence-transformer model
-        """
+        """Initialize sentence-transformer model."""
         self.device = torch.device(
             "cuda" if torch.cuda.is_available() else "cpu")
 
@@ -114,19 +93,11 @@ class TextEncoder:
         self._embedding_dim = 512
 
     def get_embedding_dim(self):
-        """Return the dimensionality of the embeddings."""
+        """Return embedding dimensionality."""
         return self._embedding_dim
 
     def encode(self, texts):
-        """
-        Extract and normalize embeddings from text.
-
-        Args:
-            texts: Single string or list of strings
-
-        Returns:
-            L2-normalized embeddings as torch.Tensor of shape (n, 512)
-        """
+        """Extract normalized embeddings from text."""
         # Handle single text
         if isinstance(texts, str):
             texts = [texts]
